@@ -16,9 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // CONSTS
         // ============
 
-        // The canvas element (in the future)
-        canvas: {},
-
         // Size of canvas
         canvasSize: [
             document.documentElement.clientWidth - 74,
@@ -67,4 +64,14 @@ document.addEventListener('DOMContentLoaded', () => {
         // Add the node to the DOM
         document.getElementById('sidebar').appendChild(el);
     });
+
+    // Listen for the keys to delete selected items
+    document.addEventListener('keydown', (key) => {
+        if (key.key == "Delete" || key.key == "Backspace") {
+            data.canvas.getActiveObjects().forEach((obj) => {
+                data.canvas.remove(obj);
+            })
+            data.canvas.discardActiveObject();
+        }
+    })
 });
