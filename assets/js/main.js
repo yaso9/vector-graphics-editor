@@ -1,8 +1,8 @@
 function newRectangle() {
     data.canvas.add(new fabric.Rect({
-        left: (data.canvasSize[0] - 100) / 2,
-        top: (data.canvasSize[1] - 100) / 2,
         fill: '#' + data.color.toHex(),
+        left: data.mouse.x,
+        top: data.mouse.y,
         width: 100,
         height: 100
     }));
@@ -42,18 +42,27 @@ document.addEventListener('DOMContentLoaded', () => {
             document.documentElement.clientWidth - 74,
             document.documentElement.clientHeight
         ],
+        
+        //  Current mouse pointer
+        mouse: undefined,
+        //  Currently selected tool
+        tool: undefined,
+
+        //  In progress newLine creation
 
         // Tools
         tools: [
             {
                 name: 'Rectangle',
                 icon: 'rectangle',
-                action: newRectangle
+                action: newRectangle,
+                immediate: false
             },
             {
                 name: 'Color Picker',
                 icon: 'colorSelect',
-                action: openColorPicker
+                action: openColorPicker,
+                immediate: true
             }
         ],
 
@@ -83,7 +92,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Set properties
         el.title = tool.name;
         el.style.backgroundImage = 'url(\'/assets/img/' + tool.icon + '.png\')';
-        el.addEventListener('click', tool.action);
+        el.addEventListener('click', tool.immediate ? tool.action : () => {
+            data.tool=tool;
+        });
         el.classList.add('tool');
 
         // Add the node to the DOM
@@ -103,4 +114,17 @@ document.addEventListener('DOMContentLoaded', () => {
             data.color = fabric.Color.fromHex(document.getElementById('color-textbox').value);
         }
     });
+
+    data.canvas.on('mouse:down', function(e){
+        if(data.tool!==undefined)
+            data.tool.action();
+    });
+    
+    data.canvas.on('mouse:move', function(e){
+        mouseXY(e);
+    });
+
+    function mouseXY(e){
+        data.mouse=data.canvas.getPointer(e)
+    }
 });
