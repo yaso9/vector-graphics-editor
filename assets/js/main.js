@@ -1,12 +1,14 @@
 function newRectangle() {
     data.canvas.add(new fabric.Rect({
-        left: (data.canvasSize[0] - 100) / 2,
-        top: (data.canvasSize[1] - 100) / 2,
+        left: data.mouse.x,
+        top: data.mouse.y,
         fill: data.foreground,
         width: 100,
         height: 100
     }));
 }
+
+
 
 // Wait for the DOM to load
 document.addEventListener('DOMContentLoaded', () => {
@@ -24,6 +26,13 @@ document.addEventListener('DOMContentLoaded', () => {
             document.documentElement.clientWidth - 74,
             document.documentElement.clientHeight
         ],
+        
+        //  Current mouse pointer
+        mouse: undefined,
+        //  Currently selected tool
+        tool: undefined,
+
+        //  In progress newLine creation
 
         // Tools
         tools: [
@@ -61,10 +70,25 @@ document.addEventListener('DOMContentLoaded', () => {
         // Set properties
         el.title = tool.name;
         el.style.backgroundImage = 'url(\'/assets/img/' + tool.icon + '.png\')';
-        el.addEventListener('click', tool.action);
+        el.addEventListener('click', () => {
+            data.tool=tool;
+        });
         el.classList.add('tool');
 
         // Add the node to the DOM
         document.getElementById('sidebar').appendChild(el);
     });
+
+    data.canvas.on('mouse:down', function(e){
+        if(data.tool!==undefined)
+            data.tool.action();
+      });
+    
+    data.canvas.on('mouse:move', function(e){
+        mouseXY(e);
+      });
+    function mouseXY(e){
+        data.mouse=data.canvas.getPointer(event.e)
+    }
+
 });
