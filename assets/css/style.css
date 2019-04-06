@@ -9,6 +9,28 @@ body {
     height: 100%;
 }
 
+#main-container {
+    display: flex;
+    flex-direction: row;
+    justify-items: center;
+
+    width: 100%;
+    height: 100%;
+}
+
 #main-canvas {
-    border: 1px solid #999;
+}
+
+#sidebar {
+    width: 74px;
+    height: 100%;
+
+    background-color: #1f2326;
+}
+
+.tool {
+    width: 37px;
+    height: 37px;
+
+    display: inline-block;
 }
