@@ -34,3 +34,18 @@ body {
 
     display: inline-block;
 }
+
+#color-picker {
+    padding: 20px;
+    width: 250px;
+    height: 100px;
+
+    color: #eee;
+    background-color: #1f2326;
+
+    position: absolute;
+    top: 0;
+    left: 74px;
+
+    display: none;
+}

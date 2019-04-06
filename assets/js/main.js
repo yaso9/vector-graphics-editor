@@ -2,10 +2,31 @@ function newRectangle() {
     data.canvas.add(new fabric.Rect({
         left: (data.canvasSize[0] - 100) / 2,
         top: (data.canvasSize[1] - 100) / 2,
-        fill: data.foreground,
+        fill: '#' + data.color.toHex(),
         width: 100,
         height: 100
     }));
+}
+
+function openColorPicker() {
+    let colorPicker = document.getElementById('color-picker');
+    let colorTextbox = document.getElementById('color-textbox');
+
+    colorTextbox.value = data.color.toHex();
+    colorPicker.style.display = 'block';
+
+    function clickHandler() {
+        setTimeout(() => {
+            if (colorTextbox === document.activeElement)
+                return;
+
+            document.removeEventListener('click', clickHandler);
+            colorPicker.style.display = 'none';
+        }, 10);
+    }
+    setTimeout(() => {
+        document.addEventListener('click', clickHandler);
+    }, 10);
 }
 
 // Wait for the DOM to load
@@ -28,6 +49,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 name: 'Rectangle',
                 icon: 'rectangle',
                 action: newRectangle
+            },
+            {
+                name: 'Color Picker',
+                icon: 'colorSelect',
+                action: openColorPicker
             }
         ],
 
@@ -35,9 +61,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // END CONSTS
         // ============
 
-        // Colors
-        foreground: fabric.Color.fromHex('000000'),
-        background: fabric.Color.fromHex('FFFFFF')
+        // Currently selected color
+        color: fabric.Color.fromHex('000000')
     };
 
     // Get the canvas and context
@@ -70,8 +95,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (key.key == "Delete" || key.key == "Backspace") {
             data.canvas.getActiveObjects().forEach((obj) => {
                 data.canvas.remove(obj);
-            })
+            });
             data.canvas.discardActiveObject();
         }
-    })
+
+        if (key.key == "Enter") {
+            data.color = fabric.Color.fromHex(document.getElementById('color-textbox').value);
+        }
+    });
 });
