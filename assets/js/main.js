@@ -81,7 +81,7 @@ function openProperties() {
     let setColorButton = document.createElement('button');
     setColorButton.innerText = 'Set Color';
     setColorButton.addEventListener('click', () => {
-        data.canvas.getActiveObject().set('fill', '#' + data.color.toHex());
+        data.canvas.getActiveObject().set(data.canvas.getActiveObject().type != 'path' ? 'fill' : 'stroke', '#' + data.color.toHex());
         data.canvas.renderAll();
     });
     propertiesBox.appendChild(setColorButton);
