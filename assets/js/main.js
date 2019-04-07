@@ -8,6 +8,15 @@ function newRectangle() {
     }));
 }
 
+function newOval() {
+    data.canvas.add(new fabric.Circle({
+        fill: '#' + data.color.toHex(),
+        left: data.mouse.x,
+        top: data.mouse.y,
+        radius: 50
+    }));
+}
+
 function openColorPicker() {
     let colorPicker = document.getElementById('color-picker');
     let colorTextbox = document.getElementById('color-textbox');
@@ -116,6 +125,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 icon: 'deselectTool',
                 immediate: true,
                 action: deselectTool
+            },
+            {
+                name: 'Oval',
+                icon: 'oval',
+                immediate: false,
+                action: newOval
             }
         ],
 
