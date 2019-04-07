@@ -230,13 +230,38 @@ function openProperties() {
     }, 10);
 }
 
-function saveFile() {
+function exportFile() {
     let downloadLink = document.createElement('a');
     downloadLink.download = 'Vector Graphics.svg';
     downloadLink.href = URL.createObjectURL(new Blob([data.canvas.toSVG()], {type: 'text/plain'}));
     downloadLink.style.display = 'none';
     document.body.appendChild(downloadLink);
     downloadLink.click();
+}
+
+function saveFile() {
+    let downloadLink = document.createElement('a');
+    downloadLink.download = 'Vector Graphics.graphics';
+    downloadLink.href = URL.createObjectURL(new Blob([JSON.stringify(data.canvas)], {type: 'text/plain'}));
+    downloadLink.style.display = 'none';
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+}
+
+function openFile() {
+    let fileSelector = document.createElement('input');
+    fileSelector.type = 'file';
+    fileSelector.addEventListener('change', () => {
+        let reader = new FileReader();
+        reader.onload = () => {
+            data.canvas.loadFromJSON(reader.result.toString());
+        };
+
+        reader.readAsText(fileSelector.files.item(0));
+    });
+    fileSelector.style.display = 'none';
+    document.body.appendChild(fileSelector);
+    fileSelector.click();
 }
 
 function deselectTool() {
@@ -298,10 +323,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 action: newOval
             },
             {
-                name: 'Save File',
-                icon: 'saveFile',
+                name: 'Export File',
+                icon: 'export',
                 immediate: true,
-                action: saveFile
+                action: exportFile
             },
             {
                 name: 'Polygon',
@@ -314,6 +339,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 icon: 'strokeColor',
                 immediate: true,
                 action: openStrokeColorPicker
+            },
+            {
+                name: 'Save File',
+                icon: 'saveFile',
+                immediate: true,
+                action: saveFile
+            },
+            {
+                name: 'Open File',
+                icon: 'openFile',
+                immediate: true,
+                action: openFile
             }
         ],
 
