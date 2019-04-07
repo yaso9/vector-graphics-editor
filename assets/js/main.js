@@ -66,6 +66,10 @@ function openProperties() {
     }, 10);
 }
 
+function deselectTool() {
+    data.tool = undefined;
+}
+
 // Wait for the DOM to load
 document.addEventListener('DOMContentLoaded', () => {
     // App state
@@ -106,6 +110,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 icon: 'properties',
                 immediate: true,
                 action: openProperties
+            },
+            {
+                name: 'Deselect Tool Tool',
+                icon: 'deselectTool',
+                immediate: true,
+                action: deselectTool
             }
         ],
 
