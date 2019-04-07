@@ -332,6 +332,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         selectedToolElement: undefined,
 
+        clipboard: undefined,
+
         // Currently selected color
         color: fabric.Color.fromHex('000000')
     };
@@ -396,6 +398,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (key.key == "Enter") {
             data.color = fabric.Color.fromHex(document.getElementById('color-textbox').value);
+        }
+
+        if (key.key == 'c' && key.ctrlKey) {
+            if (data.canvas.getActiveObjects().length > 0) {
+                data.canvas.getActiveObject().clone((obj) => {
+                    data.clipboard = obj;
+                });
+            }
+        }
+
+        if (key.key == 'v' && key.ctrlKey) {
+            if (data.clipboard !== undefined) {
+                data.clipboard.clone((obj) => {
+                    data.canvas.discardActiveObject();
+
+                    if (obj.type === 'activeSelection') {
+                        obj.canvas = data.canvas;
+                        obj.forEachObject(function(sObj) {
+                            data.canvas.add(sObj);
+                        });
+                        obj.setCoords();
+                    } else {
+                        data.canvas.add(obj);
+                    }
+
+                    data.canvas.setActiveObject(obj);
+                    data.canvas.renderAll();
+                });
+            }
         }
     });
 
