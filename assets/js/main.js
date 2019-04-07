@@ -7,7 +7,19 @@ function newRectangle() {
         height: 100
     }));
 }
-
+function newLine() {
+        var x=data.mouse.x;
+        var y=data.mouse.y;
+    if(data.lastpathstr === undefined)
+        data.lastpathstr='m '+x+' '+y+' ';
+    else
+        var pathstr = lastpathstr+' L '+x+' '+y
+    data.canvas.add(new fabric.Path(pathstr+' z',{
+        stroke: '#' + data.color.toHex(),
+    }));
+    data.lastpathx=x;
+    data.lastpathy=y;
+}
 function newOval() {
     data.canvas.add(new fabric.Circle({
         fill: '#' + data.color.toHex(),
@@ -131,6 +143,10 @@ document.addEventListener('DOMContentLoaded', () => {
         mouse: undefined,
         //  Currently selected tool
         tool: undefined,
+        //  In progress path coords
+        lastpathx: undefined,
+        lastpathy: undefined,
+        lastpathstr: undefined,
 
         //  In progress newLine creation
 
@@ -147,6 +163,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 icon: 'colorSelect',
                 action: openColorPicker,
                 immediate: true
+            },
+            {
+                name: 'Line',
+                icon: 'line',
+                action: newLine,
+                immediate: false
             },
             {
                 name: 'Properties',
