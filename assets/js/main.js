@@ -10,15 +10,24 @@ function newRectangle() {
 function newLine() {
         var x=data.mouse.x;
         var y=data.mouse.y;
+        var pathstr="";
     if(data.lastpathstr === undefined)
-        data.lastpathstr='m '+x+' '+y+' ';
-    else
-        var pathstr = lastpathstr+' L '+x+' '+y
-    data.canvas.add(new fabric.Path(pathstr+' z',{
-        stroke: '#' + data.color.toHex(),
-    }));
+        {
+            data.originalpathx=x;
+            data.originalpathy=y;
+            pathstr=data.lastpathstr='M 0 0';
+        }
+    else{
+        data.canvas.remove(data.lastpath)
+        pathstr = data.lastpathstr+' L '+(x-data.originalpathx)+' '+(y-data.originalpathy);
+    }
+    var path=new fabric.Path(pathstr);
+    path.set({top: data.originalpathy, left: data.originalpathx, stroke: '#' + data.color.toHex()});
+    data.canvas.add(path);
     data.lastpathx=x;
     data.lastpathy=y;
+    data.lastpathstr=pathstr;
+    data.lastpath=path;
 }
 function newOval() {
     data.canvas.add(new fabric.Circle({
@@ -104,15 +113,6 @@ document.addEventListener('DOMContentLoaded', () => {
             document.documentElement.clientWidth - 74,
             document.documentElement.clientHeight
         ],
-        
-        //  Current mouse pointer
-        mouse: undefined,
-        //  Currently selected tool
-        tool: undefined,
-        //  In progress path coords
-        lastpathx: undefined,
-        lastpathy: undefined,
-        lastpathstr: undefined,
 
         //  In progress newLine creation
 
@@ -160,6 +160,18 @@ document.addEventListener('DOMContentLoaded', () => {
         // END CONSTS
         // ============
 
+         //  Current mouse pointer
+         mouse: undefined,
+         //  Currently selected tool
+         tool: undefined,
+         //  In progress path coords
+         lastpath: undefined,
+         originalpathx: undefined,
+         originalpathy: undefined,
+         lastpathx: undefined,
+         lastpathy: undefined,
+         lastpathstr: undefined,
+
         // Currently selected color
         color: fabric.Color.fromHex('000000')
     };
@@ -183,6 +195,14 @@ document.addEventListener('DOMContentLoaded', () => {
         el.title = tool.name;
         el.style.backgroundImage = 'url(\'/assets/img/' + tool.icon + '.png\')';
         el.addEventListener('click', tool.immediate ? tool.action : () => {
+            if(data.tool !== undefined && data.tool.name === 'Line'){
+                data.originalpathx = undefined;
+                data.originalpathy = undefined;
+                data.lastpath = undefined;
+                data.lastpathx = undefined;
+                data.lastpathy = undefined;
+                data.lastpathstr = undefined;
+            }
             data.tool=tool;
         });
         el.classList.add('tool');
