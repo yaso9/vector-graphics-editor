@@ -87,6 +87,16 @@ function newPolygon() {
     data.lastpath=path;
 }
 
+function newText() {
+    data.canvas.add(new fabric.IText('<Insert Text Here>', {
+        fill: '#' + data.color.toHex(),
+        left: data.mouse.x,
+        top: data.mouse.y,
+        width: 100,
+        height: 100
+    }));
+}
+
 function openFillColorPicker() {
     let colorPicker = document.createElement('input');
     colorPicker.type = 'color';
@@ -359,6 +369,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 icon: 'openFile',
                 immediate: true,
                 action: openFile
+            },
+            {
+                name: 'Text',
+                icon: 'text',
+                immediate: false,
+                action: newText
             }
         ],
 
@@ -439,7 +455,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Listen for the keys to delete selected items
     document.addEventListener('keydown', (key) => {
-        if (key.key == "Delete" || key.key == "Backspace") {
+        if ((key.key == "Delete" || key.key == "Backspace") && !(data.canvas.getActiveObject().type == "i-text" && data.canvas.getActiveObject().isEditing)) {
             data.canvas.getActiveObjects().forEach((obj) => {
                 data.canvas.remove(obj);
             });
