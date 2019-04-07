@@ -29,6 +29,43 @@ function openColorPicker() {
     }, 10);
 }
 
+function openProperties() {
+    if (data.canvas.getActiveObjects().length != 1)
+        return;
+
+    let propertiesBox = document.getElementById('properties');
+    propertiesBox.innerHTML = '';
+
+    let setColorButton = document.createElement('button');
+    setColorButton.innerText = 'Set Color';
+    setColorButton.addEventListener('click', () => {
+        data.canvas.getActiveObject().set('fill', '#' + data.color.toHex());
+        data.canvas.renderAll();
+    });
+    propertiesBox.appendChild(setColorButton);
+
+    propertiesBox.style.display = 'block';
+
+    function clickHandler() {
+        setTimeout(() => {
+            let found = false;
+            propertiesBox.childNodes.forEach((el) => {
+                if (el === document.activeElement)
+                    found = true;
+            });
+
+            if (found)
+                return;
+
+            document.removeEventListener('click', clickHandler);
+            propertiesBox.style.display = 'none';
+        }, 10);
+    }
+    setTimeout(() => {
+        document.addEventListener('click', clickHandler);
+    }, 10);
+}
+
 // Wait for the DOM to load
 document.addEventListener('DOMContentLoaded', () => {
     // App state
@@ -63,6 +100,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 icon: 'colorSelect',
                 action: openColorPicker,
                 immediate: true
+            },
+            {
+                name: 'Properties',
+                icon: 'properties',
+                immediate: true,
+                action: openProperties
             }
         ],
 
