@@ -126,6 +126,14 @@ function openProperties() {
     });
     propertiesBox.appendChild(setColorButton);
 
+    let setStrokeColorButton = document.createElement('button');
+    setStrokeColorButton.innerText = 'Set Stroke Color';
+    setStrokeColorButton.addEventListener('click', () => {
+        data.canvas.getActiveObject().set(data.canvas.getActiveObject().type != 'path' ? 'stroke' : '', '#' + data.strokeColor.toHex());
+        data.canvas.renderAll();
+    });
+    propertiesBox.appendChild(setStrokeColorButton);
+
     propertiesBox.appendChild(document.createElement('br'));
 
     let xPosLabel = document.createElement('label');
