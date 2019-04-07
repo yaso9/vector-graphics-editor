@@ -282,6 +282,8 @@ document.addEventListener('DOMContentLoaded', () => {
         lastpathstr: undefined,
         pathcoords: undefined,
 
+        selectedToolElement: undefined,
+
         // Currently selected color
         color: fabric.Color.fromHex('000000')
     };
@@ -306,7 +308,8 @@ document.addEventListener('DOMContentLoaded', () => {
         el.style.backgroundImage = 'url(\'/assets/img/' + tool.icon + '.png\')';
         el.addEventListener('click', () => {
             if(data.tool !== undefined && data.tool.name === 'Line') {
-                data.lastpath.set('selectable', true);
+                if (data.lastpath !== undefined)
+                    data.lastpath.set('selectable', true);
                 data.originalpathx = undefined;
                 data.originalpathy = undefined;
                 data.lastpath = undefined;
@@ -315,6 +318,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 data.lastpathstr = undefined;
                 data.pathcoords = undefined;
             }
+
+            if (data.selectedToolElement !== undefined)
+                data.selectedToolElement.classList.remove('active');
+            el.classList.add('active');
+            data.selectedToolElement = el;
 
             if (tool.immediate) {
                 tool.action();
