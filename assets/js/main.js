@@ -53,6 +53,40 @@ function openProperties() {
     });
     propertiesBox.appendChild(setColorButton);
 
+    propertiesBox.appendChild(document.createElement('br'));
+
+    let xPosLabel = document.createElement('label');
+    xPosLabel.htmlFor = 'x-pos-in';
+    xPosLabel.innerText = 'X Coords: ';
+    propertiesBox.appendChild(xPosLabel);
+    let xPosIn = document.createElement('input');
+    xPosIn.type = 'number';
+    xPosIn.id = 'x-pos-in';
+    xPosIn.value = data.canvas.getActiveObject().left;
+    xPosIn.addEventListener('change', () => {
+        data.canvas.getActiveObject().set('left', parseInt(xPosIn.value));
+        data.canvas.getActiveObject().setCoords();
+        data.canvas.renderAll();
+    });
+    propertiesBox.appendChild(xPosIn);
+
+    propertiesBox.appendChild(document.createElement('br'));
+
+    let yPosLabel = document.createElement('label');
+    yPosLabel.htmlFor = 'y-pos-in';
+    yPosLabel.innerText = 'Y Coords: ';
+    propertiesBox.appendChild(yPosLabel);
+    let yPosIn = document.createElement('input');
+    yPosIn.type = 'number';
+    yPosIn.id = 'y-pos-in';
+    yPosIn.value = data.canvas.getActiveObject().top;
+    yPosIn.addEventListener('change', () => {
+        data.canvas.getActiveObject().set('top', parseInt(yPosIn.value));
+        data.canvas.getActiveObject().setCoords();
+        data.canvas.renderAll();
+    });
+    propertiesBox.appendChild(yPosIn);
+
     propertiesBox.style.display = 'block';
 
     function clickHandler() {
