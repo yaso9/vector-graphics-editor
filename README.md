@@ -4,4 +4,4 @@ This is an extremely simple vector graphics editor written in JavaScript to be r
 
 Live Site: http://graphics.yahyasohail.com
 
-Video Demo: https://youtu.be/IPA8NC4rWxc
+Video Demo: https://youtu.be/zqAWwHaDS8M
