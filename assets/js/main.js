@@ -435,10 +435,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 data.pathcoords = undefined;
             }
 
-            if (data.selectedToolElement !== undefined)
+            if (tool.name == 'Deselect Tool Tool')
                 data.selectedToolElement.classList.remove('active');
-            el.classList.add('active');
-            data.selectedToolElement = el;
+
+            if (!tool.immediate) {
+                if (data.selectedToolElement !== undefined && tool.name != 'Deselect Tool Tool')
+                    data.selectedToolElement.classList.remove('active');
+
+                el.classList.add('active');
+                data.selectedToolElement = el;
+            }
 
             if (tool.immediate) {
                 tool.action();
