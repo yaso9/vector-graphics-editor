@@ -116,8 +116,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     data.canvas.on('mouse:down', function(e){
-        if(data.tool!==undefined)
+        if(data.tool!==undefined && data.canvas.getActiveObjects().length == 0) {
             data.tool.action();
+        }
     });
     
     data.canvas.on('mouse:move', function(e){
