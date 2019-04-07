@@ -7,28 +7,40 @@ function newRectangle() {
         height: 100
     }));
 }
+
 function newLine() {
-        var x=data.mouse.x;
-        var y=data.mouse.y;
-        var pathstr="";
+    let x = data.mouse.x;
+    let y = data.mouse.y;
+    let pathstr = "";
+
     if(data.lastpathstr === undefined)
-        {
-            data.originalpathx=x;
-            data.originalpathy=y;
-            pathstr=data.lastpathstr='M 0 0';
-        }
-    else{
+    {
+        data.originalpathx=x;
+        data.originalpathy=y;
+        data.pathcoords = [x, y];
+        pathstr=data.lastpathstr='M 0 0';
+    }
+    else {
         data.canvas.remove(data.lastpath)
         pathstr = data.lastpathstr+' L '+(x-data.originalpathx)+' '+(y-data.originalpathy);
+
+        if (x < data.pathcoords[0]) {
+            data.pathcoords[0] = x;
+        }
+
+        if (y < data.pathcoords[1]) {
+            data.pathcoords[1] = y;
+        }
     }
     var path=new fabric.Path(pathstr);
-    path.set({top: data.originalpathy, left: data.originalpathx, stroke: '#' + data.color.toHex()});
+    path.set({top: data.pathcoords[1], left: data.pathcoords[0], stroke: '#' + data.color.toHex(), fill: false, selectable: false});
     data.canvas.add(path);
     data.lastpathx=x;
     data.lastpathy=y;
     data.lastpathstr=pathstr;
     data.lastpath=path;
 }
+
 function newOval() {
     data.canvas.add(new fabric.Circle({
         fill: '#' + data.color.toHex(),
@@ -194,17 +206,18 @@ document.addEventListener('DOMContentLoaded', () => {
         // END CONSTS
         // ============
 
-         //  Current mouse pointer
-         mouse: undefined,
-         //  Currently selected tool
-         tool: undefined,
-         //  In progress path coords
-         lastpath: undefined,
-         originalpathx: undefined,
-         originalpathy: undefined,
-         lastpathx: undefined,
-         lastpathy: undefined,
-         lastpathstr: undefined,
+        //  Current mouse pointer
+        mouse: undefined,
+        //  Currently selected tool
+        tool: undefined,
+        //  In progress path coords
+        lastpath: undefined,
+        originalpathx: undefined,
+        originalpathy: undefined,
+        lastpathx: undefined,
+        lastpathy: undefined,
+        lastpathstr: undefined,
+        pathcoords: undefined,
 
         // Currently selected color
         color: fabric.Color.fromHex('000000')
@@ -228,15 +241,23 @@ document.addEventListener('DOMContentLoaded', () => {
         // Set properties
         el.title = tool.name;
         el.style.backgroundImage = 'url(\'/assets/img/' + tool.icon + '.png\')';
-        el.addEventListener('click', tool.immediate ? tool.action : () => {
-            if(data.tool !== undefined && data.tool.name === 'Line'){
+        el.addEventListener('click', () => {
+            if(data.tool !== undefined && data.tool.name === 'Line') {
+                data.lastpath.set('selectable', true);
                 data.originalpathx = undefined;
                 data.originalpathy = undefined;
                 data.lastpath = undefined;
                 data.lastpathx = undefined;
                 data.lastpathy = undefined;
                 data.lastpathstr = undefined;
+                data.pathcoords = undefined;
             }
+
+            if (tool.immediate) {
+                tool.action();
+                return;
+            }
+
             data.tool=tool;
         });
         el.classList.add('tool');
