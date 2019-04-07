@@ -120,6 +120,22 @@ function openProperties() {
     });
     propertiesBox.appendChild(yPosIn);
 
+    propertiesBox.appendChild(document.createElement('a'));
+
+    let rotationLabel = document.createElement('label');
+    rotationLabel.htmlFor = 'rotation-in';
+    rotationLabel.innerText = 'Rotation: ';
+    propertiesBox.appendChild(rotationLabel);
+    let rotationIn = document.createElement('input');
+    rotationIn.type = 'number';
+    rotationIn.id = 'rotation-in';
+    rotationIn.value = data.canvas.getActiveObject().get('angle');
+    rotationIn.addEventListener('change', () => {
+        data.canvas.getActiveObject().set('angle', parseInt(rotationIn.value));
+        data.canvas.renderAll();
+    });
+    propertiesBox.appendChild(rotationIn);
+
     propertiesBox.style.display = 'block';
 
     function clickHandler() {
