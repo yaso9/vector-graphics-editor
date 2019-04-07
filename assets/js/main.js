@@ -136,6 +136,38 @@ function openProperties() {
     });
     propertiesBox.appendChild(rotationIn);
 
+    propertiesBox.appendChild(document.createElement('br'));
+
+    let widthLabel = document.createElement('label');
+    widthLabel.htmlFor = 'width-in';
+    widthLabel.innerText = 'Width: ';
+    propertiesBox.appendChild(widthLabel);
+    let widthIn = document.createElement('input');
+    widthIn.type = 'number';
+    widthIn.id = 'width-in';
+    widthIn.value = data.canvas.getActiveObject().width * data.canvas.getActiveObject().scaleX;
+    widthIn.addEventListener('change', () => {
+        data.canvas.getActiveObject().set('scaleX', parseInt(widthIn.value) / data.canvas.getActiveObject().width);
+        data.canvas.renderAll();
+    });
+    propertiesBox.appendChild(widthIn);
+
+    propertiesBox.appendChild(document.createElement('br'));
+
+    let heightLabel = document.createElement('label');
+    heightLabel.htmlFor = 'height-in';
+    heightLabel.innerText = 'height: ';
+    propertiesBox.appendChild(heightLabel);
+    let heightIn = document.createElement('input');
+    heightIn.type = 'number';
+    heightIn.id = 'height-in';
+    heightIn.value = data.canvas.getActiveObject().height * data.canvas.getActiveObject().scaleX;
+    heightIn.addEventListener('change', () => {
+        data.canvas.getActiveObject().set('scaleY', parseInt(heightIn.value) / data.canvas.getActiveObject().height);
+        data.canvas.renderAll();
+    });
+    propertiesBox.appendChild(heightIn);
+
     propertiesBox.style.display = 'block';
 
     function clickHandler() {
