@@ -335,6 +335,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 action: newText
             },
             {
+                name: 'Properties',
+                icon: 'properties',
+                immediate: true,
+                action: openProperties
+            },
+            {
                 name: 'Color Picker',
                 icon: 'colorSelect',
                 action: openFillColorPicker,
@@ -351,12 +357,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 icon: 'deselectTool',
                 immediate: true,
                 action: deselectTool
-            },
-            {
-                name: 'Properties',
-                icon: 'properties',
-                immediate: true,
-                action: openProperties
             },
             {
                 name: 'Export File',
