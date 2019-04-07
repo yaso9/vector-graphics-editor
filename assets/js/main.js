@@ -142,6 +142,15 @@ function openProperties() {
     }, 10);
 }
 
+function saveFile() {
+    let downloadLink = document.createElement('a');
+    downloadLink.download = 'Vector Graphics.svg';
+    downloadLink.href = URL.createObjectURL(new Blob([data.canvas.toSVG()], {type: 'text/plain'}));
+    downloadLink.style.display = 'none';
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+}
+
 function deselectTool() {
     data.tool = undefined;
 }
@@ -199,6 +208,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 icon: 'oval',
                 immediate: false,
                 action: newOval
+            },
+            {
+                name: 'Save File',
+                icon: 'saveFile',
+                immediate: true,
+                action: saveFile
             }
         ],
 
