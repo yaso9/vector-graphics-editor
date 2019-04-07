@@ -84,24 +84,33 @@ function newPolygon() {
 }
 
 function openColorPicker() {
-    let colorPicker = document.getElementById('color-picker');
-    let colorTextbox = document.getElementById('color-textbox');
+    // let colorPicker = document.getElementById('color-picker');
+    // let colorTextbox = document.getElementById('color-textbox');
+    //
+    // colorTextbox.value = data.color.toHex();
+    // colorPicker.style.display = 'block';
+    //
+    // function clickHandler() {
+    //     setTimeout(() => {
+    //         if (colorTextbox === document.activeElement)
+    //             return;
+    //
+    //         document.removeEventListener('click', clickHandler);
+    //         colorPicker.style.display = 'none';
+    //     }, 10);
+    // }
+    // setTimeout(() => {
+    //     document.addEventListener('click', clickHandler);
+    // }, 10);
 
-    colorTextbox.value = data.color.toHex();
-    colorPicker.style.display = 'block';
-
-    function clickHandler() {
-        setTimeout(() => {
-            if (colorTextbox === document.activeElement)
-                return;
-
-            document.removeEventListener('click', clickHandler);
-            colorPicker.style.display = 'none';
-        }, 10);
-    }
-    setTimeout(() => {
-        document.addEventListener('click', clickHandler);
-    }, 10);
+    let colorPicker = document.createElement('input');
+    colorPicker.type = 'color';
+    colorPicker.addEventListener('change', () => {
+        data.color = fabric.Color.fromHex(colorPicker.value);
+    });
+    colorPicker.style.display = 'none';
+    document.body.appendChild(colorPicker);
+    colorPicker.click();
 }
 
 function openProperties() {
