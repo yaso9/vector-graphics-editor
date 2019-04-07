@@ -311,40 +311,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 immediate: false
             },
             {
-                name: 'Color Picker',
-                icon: 'colorSelect',
-                action: openFillColorPicker,
-                immediate: true
-            },
-            {
-                name: 'Line',
-                icon: 'line',
-                action: newLine,
-                immediate: false
-            },
-            {
-                name: 'Properties',
-                icon: 'properties',
-                immediate: true,
-                action: openProperties
-            },
-            {
-                name: 'Deselect Tool Tool',
-                icon: 'deselectTool',
-                immediate: true,
-                action: deselectTool
-            },
-            {
                 name: 'Oval',
                 icon: 'oval',
                 immediate: false,
                 action: newOval
-            },
-            {
-                name: 'Export File',
-                icon: 'export',
-                immediate: true,
-                action: exportFile
             },
             {
                 name: 'Polygon',
@@ -353,10 +323,46 @@ document.addEventListener('DOMContentLoaded', () => {
                 action: newPolygon
             },
             {
+                name: 'Line',
+                icon: 'line',
+                action: newLine,
+                immediate: false
+            },
+            {
+                name: 'Text',
+                icon: 'text',
+                immediate: false,
+                action: newText
+            },
+            {
+                name: 'Color Picker',
+                icon: 'colorSelect',
+                action: openFillColorPicker,
+                immediate: true
+            },
+            {
                 name: 'Stroke Color',
                 icon: 'strokeColor',
                 immediate: true,
                 action: openStrokeColorPicker
+            },
+            {
+                name: 'Deselect Tool Tool',
+                icon: 'deselectTool',
+                immediate: true,
+                action: deselectTool
+            },
+            {
+                name: 'Properties',
+                icon: 'properties',
+                immediate: true,
+                action: openProperties
+            },
+            {
+                name: 'Export File',
+                icon: 'export',
+                immediate: true,
+                action: exportFile
             },
             {
                 name: 'Save File',
@@ -370,12 +376,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 immediate: true,
                 action: openFile
             },
-            {
-                name: 'Text',
-                icon: 'text',
-                immediate: false,
-                action: newText
-            }
         ],
 
         // ============
