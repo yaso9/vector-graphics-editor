@@ -7,7 +7,6 @@ function newRectangle() {
         height: 100
     }));
 }
-
 function newLine() {
         var x=data.mouse.x;
         var y=data.mouse.y;
@@ -16,10 +15,18 @@ function newLine() {
     else
         var pathstr = lastpathstr+' L '+x+' '+y
     data.canvas.add(new fabric.Path(pathstr+' z',{
-        stroke: data.foreground
+        stroke: '#' + data.color.toHex(),
     }));
     data.lastpathx=x;
     data.lastpathy=y;
+}
+function newOval() {
+    data.canvas.add(new fabric.Circle({
+        fill: '#' + data.color.toHex(),
+        left: data.mouse.x,
+        top: data.mouse.y,
+        radius: 50
+    }));
 }
 
 function openColorPicker() {
@@ -41,6 +48,47 @@ function openColorPicker() {
     setTimeout(() => {
         document.addEventListener('click', clickHandler);
     }, 10);
+}
+
+function openProperties() {
+    if (data.canvas.getActiveObjects().length != 1)
+        return;
+
+    let propertiesBox = document.getElementById('properties');
+    propertiesBox.innerHTML = '';
+
+    let setColorButton = document.createElement('button');
+    setColorButton.innerText = 'Set Color';
+    setColorButton.addEventListener('click', () => {
+        data.canvas.getActiveObject().set('fill', '#' + data.color.toHex());
+        data.canvas.renderAll();
+    });
+    propertiesBox.appendChild(setColorButton);
+
+    propertiesBox.style.display = 'block';
+
+    function clickHandler() {
+        setTimeout(() => {
+            let found = false;
+            propertiesBox.childNodes.forEach((el) => {
+                if (el === document.activeElement)
+                    found = true;
+            });
+
+            if (found)
+                return;
+
+            document.removeEventListener('click', clickHandler);
+            propertiesBox.style.display = 'none';
+        }, 10);
+    }
+    setTimeout(() => {
+        document.addEventListener('click', clickHandler);
+    }, 10);
+}
+
+function deselectTool() {
+    data.tool = undefined;
 }
 
 // Wait for the DOM to load
@@ -87,6 +135,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 icon: 'line',
                 action: newLine,
                 immediate: false
+            },
+            {
+                name: 'Properties',
+                icon: 'properties',
+                immediate: true,
+                action: openProperties
+            },
+            {
+                name: 'Deselect Tool Tool',
+                icon: 'deselectTool',
+                immediate: true,
+                action: deselectTool
+            },
+            {
+                name: 'Oval',
+                icon: 'oval',
+                immediate: false,
+                action: newOval
             }
         ],
 
@@ -140,8 +206,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     data.canvas.on('mouse:down', function(e){
-        if(data.tool!==undefined)
+        if(data.tool!==undefined && data.canvas.getActiveObjects().length == 0) {
             data.tool.action();
+        }
     });
     
     data.canvas.on('mouse:move', function(e){
