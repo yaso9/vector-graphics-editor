@@ -50,6 +50,39 @@ function newOval() {
     }));
 }
 
+function newPolygon() {
+    let x = data.mouse.x;
+    let y = data.mouse.y;
+    let pathstr = "";
+
+    if(data.lastpathstr === undefined)
+    {
+        data.originalpathx=x;
+        data.originalpathy=y;
+        data.pathcoords = [x, y];
+        pathstr=data.lastpathstr='M 0 0';
+    }
+    else {
+        data.canvas.remove(data.lastpath)
+        pathstr = data.lastpathstr+' L '+(x-data.originalpathx)+' '+(y-data.originalpathy);
+
+        if (x < data.pathcoords[0]) {
+            data.pathcoords[0] = x;
+        }
+
+        if (y < data.pathcoords[1]) {
+            data.pathcoords[1] = y;
+        }
+    }
+    var path=new fabric.Path(pathstr);
+    path.set({top: data.pathcoords[1], left: data.pathcoords[0], fill: '#' + data.color.toHex(), selectable: false});
+    data.canvas.add(path);
+    data.lastpathx=x;
+    data.lastpathy=y;
+    data.lastpathstr=pathstr;
+    data.lastpath=path;
+}
+
 function openColorPicker() {
     let colorPicker = document.getElementById('color-picker');
     let colorTextbox = document.getElementById('color-textbox');
@@ -262,6 +295,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 icon: 'saveFile',
                 immediate: true,
                 action: saveFile
+            },
+            {
+                name: 'Polygon',
+                icon: 'polygon',
+                immediate: false,
+                action: newPolygon
             }
         ],
 
@@ -307,7 +346,7 @@ document.addEventListener('DOMContentLoaded', () => {
         el.title = tool.name;
         el.style.backgroundImage = 'url(\'/assets/img/' + tool.icon + '.png\')';
         el.addEventListener('click', () => {
-            if(data.tool !== undefined && data.tool.name === 'Line') {
+            if(data.tool !== undefined && (data.tool.name === 'Line' || data.tool.name === 'Polygon')) {
                 if (data.lastpath !== undefined)
                     data.lastpath.set('selectable', true);
                 data.originalpathx = undefined;
