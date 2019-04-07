@@ -1,6 +1,8 @@
 function newRectangle() {
     data.canvas.add(new fabric.Rect({
         fill: '#' + data.color.toHex(),
+        stroke: '#' + data.strokeColor.toHex(),
+        strokeWidth: 5,
         left: data.mouse.x,
         top: data.mouse.y,
         width: 100,
@@ -33,7 +35,7 @@ function newLine() {
         }
     }
     var path=new fabric.Path(pathstr);
-    path.set({top: data.pathcoords[1], left: data.pathcoords[0], stroke: '#' + data.color.toHex(), fill: false, selectable: false});
+    path.set({top: data.pathcoords[1], left: data.pathcoords[0], stroke: '#' + data.color.toHex(), strokeWidth: 5, fill: false, selectable: false});
     data.canvas.add(path);
     data.lastpathx=x;
     data.lastpathy=y;
@@ -44,6 +46,8 @@ function newLine() {
 function newOval() {
     data.canvas.add(new fabric.Circle({
         fill: '#' + data.color.toHex(),
+        stroke: '#' + data.strokeColor.toHex(),
+        strokeWidth: 5,
         left: data.mouse.x,
         top: data.mouse.y,
         radius: 50
@@ -74,8 +78,8 @@ function newPolygon() {
             data.pathcoords[1] = y;
         }
     }
-    var path=new fabric.Path(pathstr);
-    path.set({top: data.pathcoords[1], left: data.pathcoords[0], fill: '#' + data.color.toHex(), selectable: false});
+    var path=new fabric.Path(pathstr + " z");
+    path.set({top: data.pathcoords[1], left: data.pathcoords[0], fill: '#' + data.color.toHex(), stroke: '#' + data.strokeColor.toHex(), strokeWidth: 5, selectable: false});
     data.canvas.add(path);
     data.lastpathx=x;
     data.lastpathy=y;
@@ -83,30 +87,24 @@ function newPolygon() {
     data.lastpath=path;
 }
 
-function openColorPicker() {
-    // let colorPicker = document.getElementById('color-picker');
-    // let colorTextbox = document.getElementById('color-textbox');
-    //
-    // colorTextbox.value = data.color.toHex();
-    // colorPicker.style.display = 'block';
-    //
-    // function clickHandler() {
-    //     setTimeout(() => {
-    //         if (colorTextbox === document.activeElement)
-    //             return;
-    //
-    //         document.removeEventListener('click', clickHandler);
-    //         colorPicker.style.display = 'none';
-    //     }, 10);
-    // }
-    // setTimeout(() => {
-    //     document.addEventListener('click', clickHandler);
-    // }, 10);
-
+function openFillColorPicker() {
     let colorPicker = document.createElement('input');
     colorPicker.type = 'color';
+    colorPicker.value = data.color.toHex();
     colorPicker.addEventListener('change', () => {
         data.color = fabric.Color.fromHex(colorPicker.value);
+    });
+    colorPicker.style.display = 'none';
+    document.body.appendChild(colorPicker);
+    colorPicker.click();
+}
+
+function openStrokeColorPicker() {
+    let colorPicker = document.createElement('input');
+    colorPicker.type = 'color';
+    colorPicker.value = data.strokeColor.toHex();
+    colorPicker.addEventListener('change', () => {
+        data.strokeColor = fabric.Color.fromHex(colorPicker.value);
     });
     colorPicker.style.display = 'none';
     document.body.appendChild(colorPicker);
@@ -272,7 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
             {
                 name: 'Color Picker',
                 icon: 'colorSelect',
-                action: openColorPicker,
+                action: openFillColorPicker,
                 immediate: true
             },
             {
@@ -310,6 +308,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 icon: 'polygon',
                 immediate: false,
                 action: newPolygon
+            },
+            {
+                name: 'Stroke Color',
+                icon: 'strokeColor',
+                immediate: true,
+                action: openStrokeColorPicker
             }
         ],
 
@@ -335,7 +339,8 @@ document.addEventListener('DOMContentLoaded', () => {
         clipboard: undefined,
 
         // Currently selected color
-        color: fabric.Color.fromHex('000000')
+        color: fabric.Color.fromHex('000000'),
+        strokeColor: fabric.Color.fromHex('000000')
     };
 
     // Get the canvas and context
